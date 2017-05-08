@@ -1,4 +1,3 @@
-
 # jupyterhub-deploy-docker
 
 ## Actual Quickstart  by GGG
@@ -19,7 +18,8 @@ Testing and development
 * Cross finger. In case of error, use docker logs on the JupyterHub and/or on the notebook container, which should give some indication
 
 Updating during development
-* The C kernel is a jupyter machine itself, so per-debug can be built with `docker build -t test_kernel .` and started with `docker run -p 8888:8888 test_kernel`. Right now it's not working on my machine.
+* The C kernel is a jupyter machine itself, so per-debug can be built with `docker build -t test_kernel .` and started with `docker run -it -p 8888:8888 test_kernel`.
+* Since running directly the jupyter machine might be useful, I had to fix permissions by adding a chmod 777 in the dockerscript, but in deployment this won't ever be launched anyway.
 * Updates on the c kernel requires to stop jupyterhub and user containers, remove their containers, remove docker images for tutorato-notebook in order to force a git clone again.
 * Updating the tutoratos sample should just require a jupyterhub reboot but will stop the users containers.
 
