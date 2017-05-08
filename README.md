@@ -8,16 +8,13 @@ This deployment:
 * Uses [DockerSpawner](https://github.com/jupyter/dockerspawner) to spawn single-user Jupyter Notebook servers in separate Docker containers on the same host
 * Persists JupyterHub data in a Docker volume on the host
 * Persists user notebook directories in Docker volumes on the host
-* Uses [OAuthenticator](https://github.com/jupyter/oauthenticator) and [GitHub OAuth](https://developer.github.com/v3/oauth/) to authenticate users
+* Uses [OAuthenticator](https://github.com/jupyter/oauthenticator) and [Google Console OAuth](https://developers.google.com/identity/protocols/OAuth2) (GGG: TODO!) to authenticate users
 
 ![JupyterHub single host Docker deployment](internal/jupyterhub-docker.png)
 
 ## Use Cases
 
-Possible use cases for this deployment may include, but are not limited to:
-
-* A JupyterHub demo environment that you can spin up relatively quickly.
-* A multi-user Jupyter Notebook environment for small classes, teams, or departments.
+The tutorato in UniPV
 
 ## Disclaimer
 
@@ -47,22 +44,22 @@ should work.
 ## Setup GitHub Authentication
 
 This deployment uses GitHub OAuth to authenticate users.
-It requires that you create a [GitHub application](https://github.com/settings/applications/new).
+It requires that you create a [Google oauth](https://developers.google.com/identity/protocols/OAuth2) (see developer console).
 You will need to specify an OAuth callback URL in the following form:
 
 ```
 https://<myhost.mydomain>/hub/oauth_callback
 ```
 
-You must pass the secrets that GitHub provides for your application to JupyterHub at runtime.
-You can do this by setting the `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`,
+You must pass the secrets that Google provides for your application to JupyterHub at runtime.
+You can do this by setting the `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`,
 and `OAUTH_CALLBACK_URL` environment variables when you run the JupyterHub container,
 or you can add them to the `.env` file in the root directory of this repository.  For example,
 
 ```
-GITHUB_CLIENT_ID=<github_client_id>
-GITHUB_CLIENT_SECRET=<github_client_secret>
-OAUTH_CALLBACK_URL=https://<myhost.mydomain>/hub/oauth_callback
+GOOGLE_CLIENT_ID=<github_client_id>
+GOOGLE_CLIENT_SECRET=<github_client_secret>
+GOOGLE_CALLBACK_URL=https://<myhost.mydomain>/hub/oauth_callback
 ```
 
 **Note:** The `.env` file is a special file that Docker Compose uses to lookup environment variables.
