@@ -1,4 +1,38 @@
+
 # jupyterhub-deploy-docker
+
+## Actual Quickstart  by GGG
+
+Testing and development
+* Install docker
+* Go inside a directory (e.g. /opt/)
+* Clone this repository and cd inside (/opt/jupyterhub-deploy-docker)
+* Create a "secrets" directory and put inside some empty file named "jupyterhub.key" and "jupyterhub.crt"
+* Create a file called "userlist" which will be used to set admin flag to some users (see later in this readme)
+* Go back to your base directory (e.g. /opt/) and clone [the notebook image](https://rlabgw0.unipv.it/tutorato_jupyterhub/tutorato-notebook-server)
+* cd in tutorato-notebook-server
+* Build the notebook image `docker build -t tutorato-notebook .`
+* If no errors are shown, you can cd back into ../jupyterhub-deploy-docker
+* jupyterhub_config.py [must be set with some form of authentication](https://github.com/jupyterhub/oauthenticator). Right now is set on our GitLab instance, but without actual secrets so it wont work.
+* Run "make build" to build the JupyterHub image
+* docker-compose up -d to run the container
+* Cross finger. In case of error, use docker logs on the JupyterHub and/or on the notebook container, which should give some indication
+
+Updating during development
+* The C kernel is a jupyter machine itself, so per-debug can be built with `docker build -t test_kernel .` and started with `docker run -p 8888:8888 test_kernel`. Right now it's not working on my machine.
+* Updates on the c kernel requires to stop jupyterhub and user containers, remove their containers, remove docker images for tutorato-notebook in order to force a git clone again.
+* Updating the tutoratos sample should just require a jupyterhub reboot but will stop the users containers.
+
+From testing to deploy:
+* create a clean branch, commit files, push and open a merge request to update the GitLab repositories.
+* Git clone on the server, similar to testing and deployment.
+* configure https on the server. Use "true" certificates, obtained from letsencrypt. If possible, setup cron to renew them and restart jupyterhub like once a month.
+* setup actual authentication using Google API console, again directly on the server. DO NOT PUSH SECRETS!
+* Write documentation if neeeded.
+
+The things below this quickstart are the original readme, which will require proper modifications BTW.
+
+## Original readme
 
 This repository provides a reference deployment of [JupyterHub](https://github.com/jupyter/jupyterhub), a multi-user [Jupyter Notebook](http://jupyter.org/) environment, on a **single host** using [Docker](https://docs.docker.com).  
 
