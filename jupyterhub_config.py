@@ -3,6 +3,8 @@
 
 # Configuration file for JupyterHub
 import os
+from oauthenticator.google import GoogleOAuthenticator
+import dockerspawner
 
 c = get_config()
 
@@ -35,6 +37,7 @@ notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/jovyan/work'
 c.DockerSpawner.notebook_dir = notebook_dir
 # Mount the real user's Docker volume on the host to the notebook user's
 # notebook directory in the container
+c.DockerSpawner.format_volume_name = dockerspawner.volumenamingstrategy.escaped_format_volume_name
 c.DockerSpawner.volumes = { 'jupyterhub-user-{username}': notebook_dir }
 c.DockerSpawner.extra_create_kwargs.update({ 'volume_driver': 'local' })
 # Remove containers once they are stopped
@@ -51,9 +54,17 @@ c.JupyterHub.port = 443
 c.JupyterHub.ssl_key = os.environ['SSL_KEY']
 c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
 
+# Authenticate users with Google OAuth
+
+c.JupyterHub.authenticator_class = GoogleOAuthenticator
+# Put here oauth_callback_url, client_id and client_secret
+
 # Authenticate users with GitHub OAuth
-c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
-c.GitHubOAuthenticator.oauth_callback_url = os.environ['OAUTH_CALLBACK_URL']
+
+# os.environ["GITLAB_HOST"] = "https://rlabgw0.unipv.it/"
+# c.JupyterHub.authenticator_class = 'oauthenticator.gitlab.GitLabOAuthenticator'
+# Put here oauth_callback_url, client_id and client_secret
+
 
 # Persist hub data on volume mounted inside container
 data_dir = os.environ.get('DATA_VOLUME_CONTAINER', '/data')
@@ -62,16 +73,16 @@ c.JupyterHub.cookie_secret_file = os.path.join(data_dir,
     'jupyterhub_cookie_secret')
 
 # Whitlelist users and admins
-c.Authenticator.whitelist = whitelist = set()
-c.Authenticator.admin_users = admin = set()
-c.JupyterHub.admin_access = True
-pwd = os.path.dirname(__file__)
-with open(os.path.join(pwd, 'userlist')) as f:
-    for line in f:
-        if not line:
-            continue
-        parts = line.split()
-        name = parts[0]
-        whitelist.add(name)
-        if len(parts) > 1 and parts[1] == 'admin':
-            admin.add(name)
+# c.Authenticator.whitelist = whitelist = set()
+# c.Authenticator.admin_users = admin = set()
+# c.JupyterHub.admin_access = True
+# pwd = os.path.dirname(__file__)
+# with open(os.path.join(pwd, 'userlist')) as f:
+#    for line in f:
+#        if not line:
+#            continue
+#        parts = line.split()
+#        name = parts[0]
+#        whitelist.add(name)
+#        if len(parts) > 1 and parts[1] == 'admin':
+#            admin.add(name)
