@@ -13,6 +13,9 @@ volumes:
 
 self-signed-cert:
 	# make a self-signed cert
+	@mkdir secrets
+	@cd secrets
+	@openssl req -x509 -newkey rsa:4096 -keyout jupyterhub.key -out  jupyterhub.crt-days 365
 
 secrets/jupyterhub.crt:
 	@echo "Need an SSL certificate in secrets/jupyterhub.crt"

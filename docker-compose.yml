@@ -30,9 +30,9 @@ services:
       # Using this run command (optional)
       DOCKER_SPAWN_CMD: ${DOCKER_SPAWN_CMD}
       # Required to authenticate users using GitHub OAuth
-      # GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
-      # GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
-      # OAUTH_CALLBACK_URL: ${OAUTH_CALLBACK_URL}
+      #GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      #GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      #OAUTH_CALLBACK_URL: ${OAUTH_CALLBACK_URL}
     command: >
       jupyterhub -f /srv/jupyterhub/jupyterhub_config.py
 
