@@ -3,7 +3,7 @@
 
 # Configuration file for JupyterHub
 import os
-from oauthenticator.google import GoogleOAuthenticator
+#from oauthenticator.google import GoogleOAuthenticator
 import dockerspawner
 
 c = get_config()
@@ -11,6 +11,7 @@ c = get_config()
 # We rely on environment variables to configure JupyterHub so that we
 # avoid having to rebuild the JupyterHub container every time we change a
 # configuration parameter.
+c.Spawner.default_url = '/lab'
 
 # Spawn single-user servers as Docker containers
 c.JupyterHub.spawner_class = 'dockerspawner.DockerSpawner'
@@ -50,7 +51,7 @@ c.JupyterHub.hub_ip = 'jupyterhub'
 c.JupyterHub.hub_port = 8080
 
 # TLS config
-c.JupyterHub.port = 443
+c.JupyterHub.port = 8000
 c.JupyterHub.ssl_key = os.environ['SSL_KEY']
 c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
 
@@ -66,8 +67,8 @@ c.JupyterHub.cookie_secret_file = os.path.join(data_dir,
 
 # Whitlelist users and admins
 # c.Authenticator.whitelist = whitelist = set()
-# c.Authenticator.admin_users = admin = set()
-# c.JupyterHub.admin_access = True
+c.Authenticator.admin_users = admin = set("m")
+c.JupyterHub.admin_access = True
 # pwd = os.path.dirname(__file__)
 # with open(os.path.join(pwd, 'userlist')) as f:
 #    for line in f:
