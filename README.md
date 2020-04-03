@@ -1,6 +1,16 @@
 # jupyterhub-deploy-docker
 
-## Actual Quickstart  by GGG
+## Quickstart
+* Install docker
+* Clone this repository
+* Customize .env
+* Setup authentication in jupyterhub_config.py
+* Run make to create network, volumes and build JupyterHub image
+* Build the JupyterLab image docker build -f Dockerfile.jupyterlab .
+* docker-compose up -d
+
+
+## Quickstart  by GGG
 
 Testing and development
 * Install docker

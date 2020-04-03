@@ -55,9 +55,20 @@ c.JupyterHub.port = 8000
 c.JupyterHub.ssl_key = os.environ['SSL_KEY']
 c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
 
-# Authenticate users with GitHub
-#from oauthenticator.github import GitHubOAuthenticator
-#c.JupyterHub.authenticator_class = GitHubOAuthenticator
+# Authenticate users with LDAP
+c.Authenticator.admin_users = {'u0i7826', 'u0i6332', 'u0j0629'}
+c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
+c.LDAPAuthenticator.server_address = ''
+c.LDAPAuthenticator.lookup_dn = True
+c.LDAPAuthenticator.lookup_dn_search_filter = '({login_attr}={login})'
+c.LDAPAuthenticator.lookup_dn_search_user = ''
+c.LDAPAuthenticator.lookup_dn_search_password = ''
+c.LDAPAuthenticator.user_search_base = 'OU=USERS,OU=blabla,DC=com'
+c.LDAPAuthenticator.user_attribute = 'sAMAccountName'
+c.LDAPAuthenticator.lookup_dn_user_dn_attribute = 'cn'
+c.LDAPAuthenticator.escape_userdn = False
+c.LDAPAuthenticator.valid_username_regex = r'^[a-zA-Z][.a-zA-Z0-9_-]*$'
+
 
 # Persist hub data on volume mounted inside container
 data_dir = os.environ.get('DATA_VOLUME_CONTAINER', '/data')
@@ -65,17 +76,3 @@ c.JupyterHub.db_url = os.path.join('sqlite:///', data_dir, 'jupyterhub.sqlite')
 c.JupyterHub.cookie_secret_file = os.path.join(data_dir,
     'jupyterhub_cookie_secret')
 
-# Whitlelist users and admins
-# c.Authenticator.whitelist = whitelist = set()
-c.Authenticator.admin_users = admin = set("m")
-c.JupyterHub.admin_access = True
-# pwd = os.path.dirname(__file__)
-# with open(os.path.join(pwd, 'userlist')) as f:
-#    for line in f:
-#        if not line:
-#            continue
-#        parts = line.split()
-#        name = parts[0]
-#        whitelist.add(name)
-#        if len(parts) > 1 and parts[1] == 'admin':
-#            admin.add(name)

@@ -2,11 +2,19 @@
 # Distributed under the terms of the Modified BSD License.
 FROM jupyterhub/jupyterhub:1.1.0
 
+RUN mkdir /root/.pip
+COPY ./pip.conf /root/.pip
+
 # Install dockerspawner and its dependencies
 RUN /usr/local/bin/pip install --upgrade pip
 
+RUN /usr/local/bin/pip uninstall jupyterhub -y
+RUN /usr/local/bin/pip install --upgrade jupyterhub==1.1.0
+
 RUN /usr/local/bin/pip install \
 	jupyterhub-ldapauthenticator
+
+RUN nc -v -z -w 3 ldaps 389 &> /dev/null && echo "LDAP Online" || echo "LDAP Offline"
 
 RUN /usr/local/bin/pip install \
 	dockerspawner==0.11.1
@@ -17,15 +25,18 @@ RUN /usr/local/bin/pip install \
 #    sh /tmp/getdocker
 
 # Copy TLS certificate and key
-ENV SSL_CERT /srv/jupyterhub/secrets/jupyterhub.crt
-ENV SSL_KEY /srv/jupyterhub/secrets/jupyterhub.key
-COPY ./secrets/*.crt $SSL_CERT
-COPY ./secrets/*.key $SSL_KEY
-RUN chmod 700 /srv/jupyterhub/secrets && \
-    chmod 600 /srv/jupyterhub/secrets/*
+ENV SSL_CERT /usr/local/share/jupyterhub/secrets/jupyterhub.crt
+ENV SSL_KEY /usr/local/share/jupyterhub/secrets/jupyterhub.key
+#COPY ./secrets/*.crt $SSL_CERT
+#COPY ./secrets/*.key $SSL_KEY
+RUN mkdir -p /usr/local/share/jupyterhub/secrets
+RUN openssl req -x509 -nodes -days 365 -subj "/C=CA/ST=QC/O=Company, Inc./CN=mydomain.com" -addext "subjectAltName=DNS:mydomain.com" -newkey rsa:2048 -keyout /usr/local/share/jupyterhub/secrets/jupyterhub.key -out /usr/local/share/jupyterhub/secrets/jupyterhub.crt
+RUN chmod 700 /usr/local/share/jupyterhub/secrets && \
+    chmod 600 /usr/local/share/jupyterhub/secrets/*
+
+RUN ls -lrt /usr/local/share/jupyterhub/secrets
 
 RUN useradd -ms /bin/bash m
-RUN echo 'm:linux4fun' | chpasswd 
+RUN echo 'm:demo' | chpasswd 
 
-COPY ./userlist /srv/jupyterhub/userlist
-COPY ./jupyterhub_config.py /srv/jupyterhub/jupyterhub_config.py
+COPY ./jupyterhub_config.py /usr/local/etc/jupyterhub_config.py

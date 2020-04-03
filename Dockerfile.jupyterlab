@@ -2,9 +2,13 @@
 # Distributed under the terms of the Modified BSD License.
 FROM jupyter/base-notebook
 
+RUN mkdir ~/.pip
+COPY ./pip.conf ~/.pip
+
 # Install jupyterlab
 RUN /opt/conda/bin/pip install --upgrade pip
 
 RUN /opt/conda/bin/pip install \
 	jupyterlab==1.2.1
 
+ENV JUPYTER_ENABLE_LAB=yes
