@@ -7,8 +7,15 @@ COPY ./pip.conf ~/.pip
 
 # Install jupyterlab
 RUN /opt/conda/bin/pip install --upgrade pip
+RUN /opt/conda/bin/conda update -n base conda
 
-RUN /opt/conda/bin/pip install \
-	jupyterlab==1.2.1
+RUN /opt/conda/bin/conda install -c conda-forge \
+	xeus-python==0.6.12 notebook==6 jupyterlab==2 ptvsd
+
+RUN /opt/conda/bin/npm list
+
+RUN /opt/conda/bin/jupyter labextension install @jupyterlab/debugger
+RUN /opt/conda/bin/jupyter labextension install jupyterlab-kernelspy
 
 ENV JUPYTER_ENABLE_LAB=yes
+ENV XEUS_LOG=1

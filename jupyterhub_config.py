@@ -31,7 +31,7 @@ c.DockerSpawner.network_name = network_name
 # Pass the network name as argument to spawned containers
 c.DockerSpawner.extra_host_config = { 'network_mode': network_name }
 # Explicitly set notebook directory because we'll be mounting a host volume to
-# it.  Most jupyter/docker-stacks *-notebook images run the Notebook server as
+# it. Most jupyter/docker-stacks *-notebook images run the Notebook server as
 # user `jovyan`, and set the notebook directory to `/home/jovyan/work`.
 # We follow the same convention.
 notebook_dir = os.environ.get('DOCKER_NOTEBOOK_DIR') or '/home/m/work'
@@ -56,18 +56,18 @@ c.JupyterHub.ssl_key = os.environ['SSL_KEY']
 c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
 
 # Authenticate users with LDAP
-c.Authenticator.admin_users = {'u0i7826', 'u0i6332', 'u0j0629'}
-c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
-c.LDAPAuthenticator.server_address = ''
-c.LDAPAuthenticator.lookup_dn = True
-c.LDAPAuthenticator.lookup_dn_search_filter = '({login_attr}={login})'
-c.LDAPAuthenticator.lookup_dn_search_user = ''
-c.LDAPAuthenticator.lookup_dn_search_password = ''
-c.LDAPAuthenticator.user_search_base = 'OU=USERS,OU=blabla,DC=com'
-c.LDAPAuthenticator.user_attribute = 'sAMAccountName'
-c.LDAPAuthenticator.lookup_dn_user_dn_attribute = 'cn'
-c.LDAPAuthenticator.escape_userdn = False
-c.LDAPAuthenticator.valid_username_regex = r'^[a-zA-Z][.a-zA-Z0-9_-]*$'
+#c.Authenticator.admin_users = {'u0i7826', 'u0i6332', 'u0j0629'}
+#c.JupyterHub.authenticator_class = 'ldapauthenticator.LDAPAuthenticator'
+#c.LDAPAuthenticator.server_address = ''
+#c.LDAPAuthenticator.lookup_dn = True
+#c.LDAPAuthenticator.lookup_dn_search_filter = '({login_attr}={login})'
+#c.LDAPAuthenticator.lookup_dn_search_user = ''
+#c.LDAPAuthenticator.lookup_dn_search_password = ''
+#c.LDAPAuthenticator.user_search_base = 'OU=USERS,OU=blabla,DC=com'
+#c.LDAPAuthenticator.user_attribute = 'sAMAccountName'
+#c.LDAPAuthenticator.lookup_dn_user_dn_attribute = 'cn'
+#c.LDAPAuthenticator.escape_userdn = False
+#c.LDAPAuthenticator.valid_username_regex = r'^[a-zA-Z][.a-zA-Z0-9_-]*$'
 
 
 # Persist hub data on volume mounted inside container
